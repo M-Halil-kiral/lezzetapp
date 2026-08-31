@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'models/recipe.dart';
+import 'global_veriler.dart'; 
 
-class TarifDetaySayfasi extends StatelessWidget {
-  final Recipe tarif; // Ana sayfadan gelecek olan tarif nesnesi
+class TarifDetaySayfasi extends StatefulWidget {
+  final Recipe tarif; 
 
   const TarifDetaySayfasi({super.key, required this.tarif});
 
   @override
+  State<TarifDetaySayfasi> createState() => _TarifDetaySayfasiState();
+}
+
+class _TarifDetaySayfasiState extends State<TarifDetaySayfasi> {
+  @override
   Widget build(BuildContext context) {
+    // KONTROL BURADA OLMALI (build metodunun hemen içinde)
+    // Böylece her setState çalıştığında sayfa yemeğin favorilerde olup olmadığını tekrar kontrol eder
+    bool favoriMi = favoriTarifler.any((t) => t.tarifAdi == widget.tarif.tarifAdi);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
       appBar: AppBar(
@@ -15,21 +25,30 @@ class TarifDetaySayfasi extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black87),
         title: Text(
-          tarif.tarifAdi,
+          widget.tarif.tarifAdi,
           style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
-
-
-            actions: [
+        actions: [
           IconButton(
-            icon: const Icon(Icons.favorite_border, size: 28),
+            icon: Icon(
+              favoriMi ? Icons.favorite : Icons.favorite_border,
+              color: favoriMi ? Colors.red : Colors.black87, 
+              size: 30,
+            ),
             onPressed: () {
-              // İleride buraya tıklandığında kalbi kırmızı yapma kodu gelecek
-              print("Detay sayfasında favoriye tıklandı!");
+              // SETSTATE KISMI: Kalbe basıldığında sayfayı anında yeniler
+              setState(() {
+                if (favoriMi) {
+                  favoriTarifler.removeWhere((t) => t.tarifAdi == widget.tarif.tarifAdi);
+                } else {
+                  favoriTarifler.add(widget.tarif);
+                }
+              });
             },
           ),
         ],
       ),
+      // body: BURADAN AŞAĞISI SENİN KENDİ KODUN...body: BURADAN AŞAĞISI SENİN KENDİ KODUN...DAN AŞAĞISI SENİN ESKİ KODUN OLARAK KALACAK
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -51,9 +70,9 @@ class TarifDetaySayfasi extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _infoCard(Icons.timer, '${tarif.pisirmeSuresiDk ?? 0} dk'),
-                _infoCard(Icons.star, tarif.zorluk.toUpperCase()),
-                if (tarif.kategori.isNotEmpty) _infoCard(Icons.category, tarif.kategori),
+                _infoCard(Icons.timer, '${widget.tarif.pisirmeSuresiDk ?? 0} dk'),
+                _infoCard(Icons.star, widget.tarif.zorluk.toUpperCase()),
+                if (widget.tarif.kategori.isNotEmpty) _infoCard(Icons.category, widget.tarif.kategori),
               ],
             ),
             const SizedBox(height: 25),
@@ -74,7 +93,7 @@ class TarifDetaySayfasi extends StatelessWidget {
                 ],
               ),
               child: Column(
-                children: tarif.malzemeler.map((malzeme) {
+                children: widget.tarif.malzemeler.map((malzeme) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Row(
@@ -101,7 +120,7 @@ class TarifDetaySayfasi extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            ...tarif.yapilisAdimlari.asMap().entries.map((adim) {
+            ...widget.tarif.yapilisAdimlari.asMap().entries.map((adim) {
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(15),

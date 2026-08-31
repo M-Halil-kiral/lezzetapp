@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // Ana sayfayı diğer dosyadan çağırıyoruz
-
+// İskelet dosyamızı buraya dahil ediyoruz
+import 'ana_iskelet.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -12,9 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Lezzet Tarifleri',
-      home: const AnaSayfa(),
+      debugShowCheckedModeBanner: false,
+      // DİKKAT: Burası AnaSayfa() DEĞİL, AnaIskelet() olmalı!
+      home: const AnaIskelet(), 
     );
   }
 }
