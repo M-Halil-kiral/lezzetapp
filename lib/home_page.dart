@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'models/recipe.dart'; 
 import 'tarif_detay.dart';
 import 'global_veriler.dart';
@@ -13,20 +11,15 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
-  // Tüm veriyi tutacağımız ana liste
-  List<Recipe> tumTarifler = [];
-  // Ekranda gösterilecek filtrelenmiş veya parçalanmış liste
-  List<Recipe> gosterilenTarifler = [];
+  // SİLDİK: List<Recipe> tumTarifler = []; (Çünkü artık globalde var)
   
-  // Sayfalama ayarları
+  List<Recipe> gosterilenTarifler = [];
   int gosterilecekAdet = 20;
   final int artisMiktari = 20;
-  
-  // Kontrolcüler
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _aramaController = TextEditingController();
   
-  bool yukleniyor = true; // İlk açılıştaki yükleme ekranı için
+  bool yukleniyor = true; 
   String arananKelime = "";
 
   @override
@@ -34,35 +27,23 @@ class _AnaSayfaState extends State<AnaSayfa> {
     super.initState();
     verileriHazirla();
     
-    // Sayfa aşağı kaydırıldıkça çalışacak dinleyici
     _scrollController.addListener(() {
-      // Sayfanın en altına 200 piksel kadar yaklaşıldığında yeni verileri yükle
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
         dahaFazlaYukle();
       }
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _aramaController.dispose();
-    super.dispose();
-  }
-
-  // JSON dosyasını okuyup ana listeye atma işlemi
+  // GÜNCELLENDİ: Artık globalden çekiyoruz
   Future<void> verileriHazirla() async {
-    final String response = await rootBundle.loadString('assets/recipes.json');
-    final data = await jsonDecode(response);
+    await tumTarifleriYukle(); // global_veriler.dart içindeki fonksiyonu çağırdık
     
     setState(() {
-      // Tüm veriyi parse edip listeye alıyoruz (sadece hafızada durur, ekrana çizilmez)
-      tumTarifler = (data as List).map((json) => Recipe.fromJson(json)).toList();
-      // İlk 20 tanesini ekrana gönderiyoruz
       gosterilenTarifler = tumTarifler.take(gosterilecekAdet).toList();
       yukleniyor = false;
     });
   }
+                
 
   // Aşağı kaydırdıkça yeni tarifleri ekleme fonksiyonu
   void dahaFazlaYukle() {

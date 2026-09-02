@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lezzetapp/favorier_sayfasi.dart';
 import 'home_page.dart';
 import 'global_veriler.dart';
+import 'malzeme_arama_sayfasi.dart'; // Dosya adını kendi verdiğin isme göre yaz
 
 class AnaIskelet extends StatefulWidget {
   const AnaIskelet({super.key});
@@ -17,7 +18,7 @@ class _AnaIskeletState extends State<AnaIskelet> {
   final List<Widget> _sayfalar = [
     const AnaSayfa(),
     FavorilerSayfasi(favoriTarifler: favoriTarifler), // Global listeyi gönderiyoruz
-    const Center(child: Text("Tarifler Yakında")),
+    const MalzemeAramaSayfasi(),
     const Center(child: Text("Yakında")),
   ];
 
