@@ -18,6 +18,15 @@ class Malzeme {
       birim: json['birim']?.toString() ?? '',
     );
   }
+  // Malzeme nesnesini JSON'a çevirir
+  Map<String, dynamic> toJson() {
+    return {
+      'isim': isim,
+      'miktar': miktar,
+      'birim': birim,
+    };
+  }
+
 }
 
 // Ana Tarif sınıfı
@@ -60,4 +69,20 @@ class Recipe {
       yapilisAdimlari: List<String>.from(json['yapilis_adimlari'] ?? []),
     );
   }
+  // Recipe nesnesini JSON'a çevirir
+  Map<String, dynamic> toJson() {
+    return {
+      'tarif_adi': tarifAdi,
+      'kategori': kategori,
+      'porsiyon': porsiyon,
+      'hazirlik_suresi_dk': hazirlikSuresiDk,
+      'pisirme_suresi_dk': pisirmeSuresiDk,
+      'zorluk': zorluk,
+      'pisirme_yontemi': pisirmeYontemi,
+      // Alt listedeki malzemeleri de tek tek JSON'a çeviriyoruz
+      'malzemeler': malzemeler.map((m) => m.toJson()).toList(),
+      'yapilis_adimlari': yapilisAdimlari,
+    };
+  }
+
 }

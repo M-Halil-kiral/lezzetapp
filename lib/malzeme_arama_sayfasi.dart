@@ -113,7 +113,7 @@ class _MalzemeAramaSayfasiState extends State<MalzemeAramaSayfasi> {
                   child: TextField(
                     controller: _malzemeController,
                     decoration: InputDecoration(
-                      hintText: 'Örn: Un ,Tavuk, Patates...',
+                      hintText: 'Örn: Un, Tavuk, Patates...',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
